@@ -1,17 +1,9 @@
----
-title: "Tidy data"
-output: github_document
----
-
-```{r setup, echo = FALSE, message = FALSE}
-library(tidyverse)
-library(readxl)
-library(haven)
-```
+Tidy data
+================
 
 This document will show how to tidy data.
 
-```{r}
+``` r
 pulse_df = 
   read_sas("data/public_pulse_data.sas7bdat") |>
 janitor::clean_names() |>
@@ -27,14 +19,13 @@ janitor::clean_names() |>
   relocate(id, visit)
 ```
 
-## Pivot longer 
+## Pivot longer
 
-This needs to go from wide to long format. 
+This needs to go from wide to long format.
 
+Do one more example.
 
-Do one more example. 
-
-```{r longer}
+``` r
 litters_df = 
   read_csv("data/FAS_litters.csv", na = c("NA", ".", "")) |>
   janitor::clean_names() |>
@@ -51,11 +42,20 @@ litters_df =
       ))
 ```
 
-##Pivot wider
+    ## Rows: 49 Columns: 8
+    ## ── Column specification ────────────────────────────────────────────────────────
+    ## Delimiter: ","
+    ## chr (2): Group, Litter Number
+    ## dbl (6): GD0 weight, GD18 weight, GD of Birth, Pups born alive, Pups dead @ ...
+    ## 
+    ## ℹ Use `spec()` to retrieve the full column specification for this data.
+    ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 
-Let's make up ana analysis result table.
+\##Pivot wider
 
-```{r}
+Let’s make up ana analysis result table.
+
+``` r
 analysis_df =
   tibble(
     group = c("treatment", "treatment", "control", "control"),
@@ -66,7 +66,7 @@ analysis_df =
 
 Pivot wider for human readability.
 
-```{r}
+``` r
 analysis_df |>
   pivot_wider(
     names_from = time,
@@ -75,9 +75,14 @@ analysis_df |>
   knitr::kable()
 ```
 
+| group     | pre | post |
+|:----------|----:|-----:|
+| treatment | 4.0 |   10 |
+| control   | 4.2 |    5 |
+
 ## Bind tables.
 
-```{r}
+``` r
 fellowship_ring = 
   read_excel("data/LotR_Words.xlsx", range = "B3:D6") |>
   mutate(movie = "fellowship_ring")
@@ -101,4 +106,3 @@ lotr_df =
   relocate(movie) |>
   mutate(race = str_to_lower(race))
 ```
-
